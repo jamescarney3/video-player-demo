@@ -7,7 +7,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.html$/,
+        test: /\.(html|mp4)$/,
         loader: 'file?name=[name].[ext]',
       },
       {

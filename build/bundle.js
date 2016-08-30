@@ -61,6 +61,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	__webpack_require__(173);
+	__webpack_require__(174);
 
 	_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('content'));
 
@@ -21419,7 +21420,7 @@
 /* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -21432,12 +21433,21 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var App = _react2.default.createClass({
-	  displayName: 'App',
+	  displayName: "App",
 	  render: function render() {
 	    return _react2.default.createElement(
-	      'div',
+	      "div",
 	      null,
-	      'I\'m the App component'
+	      _react2.default.createElement(
+	        "h1",
+	        null,
+	        "I have a video player"
+	      ),
+	      _react2.default.createElement(
+	        "video",
+	        null,
+	        _react2.default.createElement("source", { src: "/assets/sintel_trailer-480.mp4", type: "video/mp4" })
+	      )
 	    );
 	  }
 	});
@@ -21449,6 +21459,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "index.html";
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sintel_trailer-480.mp4";
 
 /***/ }
 /******/ ]);
