@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 
 import Player from './Player.jsx';
+import ClipForm from './ClipForm.jsx';
 
 // stubbed out Clip constructor function
 function Clip(options) {
@@ -10,32 +11,37 @@ function Clip(options) {
   this.end = options.end;
 }
 
+Clip.prototype.validate = function validate() {
+  return true;
+};
+
 const App = React.createClass({
   propTypes: {
     children: PropTypes.node,
   },
   getInitialState() {
     return ({
+      nextClipID: 1,
       clips: [],
     });
   },
-  validateClip(newClip) {
-    console.log(newClip);
-    return true;
-  },
   addClip(options) {
     const newClip = new Clip(options);
-    if (this.validateClip(newClip)) {
+    if (newClip.validate()) {
       const newClips = this.state.clips.concat(newClip);
-      this.setState({ clips: newClips });
+      const nextClipID = this.state.nextClipID + 1;
+      this.setState({ clips: newClips, nextClipID });
+      return true;
     }
+    return false;
   },
   render() {
     return (
       <div>
         <h1>Video Player</h1>
         <Player start={3} end={7} />
-        {this.props.children}
+        <ClipForm nextClipID={this.state.nextClipID} addClip={this.addClip} />
+        {this.state.clips.map((clip) => <div key={clip.id}>{clip.name}</div>)}
       </div>
     );
   },
