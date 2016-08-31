@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+
+import Player from './Player.jsx';
 
 const App = React.createClass({
+  propTypes: {
+    children: PropTypes.node,
+  },
+  getInitialState() {
+    return ({
+      clips: [],
+    });
+  },
   render() {
     return (
       <div>
         <h1>Video Player</h1>
-        <video poster="sintel.jpg">
-          <source src="sintel_trailer-480.mp4" type="video/mp4" />
-          <track src="chapters.vtt" kind="chapters" default />
-        </video>
+        <Player start={3} end={7} />
+        {this.props.children}
       </div>
     );
   },
