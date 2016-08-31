@@ -21441,12 +21441,12 @@
 	      _react2.default.createElement(
 	        "h1",
 	        null,
-	        "I have a video player"
+	        "Video Player"
 	      ),
 	      _react2.default.createElement(
 	        "video",
-	        null,
-	        _react2.default.createElement("source", { src: "/assets/sintel_trailer-480.mp4", type: "video/mp4" })
+	        { autoPlay: true, control: true },
+	        _react2.default.createElement("source", { src: "sintel_trailer-480.mp4", type: "video/mp4" })
 	      )
 	    );
 	  }
