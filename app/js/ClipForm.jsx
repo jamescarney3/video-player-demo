@@ -3,22 +3,23 @@ import { Button, Form, FormControl } from 'react-bootstrap';
 
 const ClipForm = React.createClass({
   propTypes: {
-    addClip: PropTypes.func.isRequired,
-    nextClipID: PropTypes.number.isRequired,
+    createClip: PropTypes.func,
+    end: PropTypes.number,
+    name: PropTypes.string,
+    start: PropTypes.number,
+    updateClip: PropTypes.func,
   },
   getInitialState() {
     return {
-      name: '',
-      start: '',
-      end: '',
+      name: this.props.name || '',
+      start: this.props.start || '',
+      end: this.props.end || '',
     };
   },
   onClickAdd() {
     const { name, start, end } = this.state;
-    const id = this.props.nextClipID;
-    if (this.props.addClip({ id, name, start, end })) {
-      this.setState(this.getInitialState());
-    }
+    this.props.createClip(name, start, end);
+    this.setState(this.getInitialState());
   },
   handleNameChange(e) {
     this.setState({ name: e.target.value });
@@ -48,8 +49,7 @@ const ClipForm = React.createClass({
           value={this.state.end}
           onChange={this.handleEndChange}
         />
-        <Button onClick={this.onClickAdd}>Add Clip</Button>
-        <span>Next clip ID: {this.props.nextClipID}</span>
+        <Button onClick={this.onClickAdd}>Submit</Button>
       </Form>
     );
   },

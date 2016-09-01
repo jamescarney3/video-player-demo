@@ -1,47 +1,67 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import Player from './Player.jsx';
 import ClipForm from './ClipForm.jsx';
-
-// stubbed out Clip constructor function
-function Clip(options) {
-  this.id = options.id;
-  this.name = options.name;
-  this.start = options.start;
-  this.end = options.end;
-}
-
-Clip.prototype.validate = function validate() {
-  return true;
-};
+import Clip from './Clip.jsx';
 
 const App = React.createClass({
-  propTypes: {
-    children: PropTypes.node,
-  },
   getInitialState() {
     return ({
-      nextClipID: 1,
       clips: [],
+      activeClipID: '',
     });
   },
-  addClip(options) {
-    const newClip = new Clip(options);
-    if (newClip.validate()) {
-      const newClips = this.state.clips.concat(newClip);
-      const nextClipID = this.state.nextClipID + 1;
-      this.setState({ clips: newClips, nextClipID });
-      return true;
+  getChildClips() {
+    return this.state.clips.map((clip) =>
+      <Clip
+        key={clip.id}
+        clip={clip}
+        deleteClip={this.deleteClip}
+        playClip={this.playClip}
+        updateClip={this.updateClip}
+      />
+    );
+  },
+  getActiveClip() {
+    return this.state.clips.find((clip) => clip.id === this.state.activeClipID);
+  },
+  createClip(name, start, end) {
+    const id = this.nextClipID();
+    const newClips = this.state.clips.concat({ id, name, start, end });
+    this.setState({ clips: newClips });
+  },
+  deleteClip(id) {
+    const { clips } = this.state;
+    clips.splice(clips.findIndex((clip) => clip.id === id), 1);
+    this.setState({ clips });
+  },
+  updateClip(id, name, start, end) {
+    const newClips = this.state.clips.map((clip) => (
+      clip.id === id ? { id, name, start, end } : clip
+    ));
+    this.setState({ clips: newClips });
+  },
+  playClip(id) {
+    this.setState({ activeClipID: id });
+  },
+  validateClipID(id) {
+    return this.state.clips.every((clip) => clip.id !== id);
+  },
+  nextClipID() {
+    let newClipID = 1;
+    while (!this.validateClipID(newClipID)) {
+      newClipID += 1;
     }
-    return false;
+    return newClipID;
   },
   render() {
     return (
       <div>
         <h1>Video Player</h1>
-        <Player start={3} end={7} />
-        <ClipForm nextClipID={this.state.nextClipID} addClip={this.addClip} />
-        {this.state.clips.map((clip) => <div key={clip.id}>{clip.name}</div>)}
+        <Player clip={this.getActiveClip()} />
+        <h2>Add a clip:</h2>
+        <ClipForm createClip={this.createClip} />
+        {this.getChildClips()}
       </div>
     );
   },
