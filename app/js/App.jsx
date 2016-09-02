@@ -1,4 +1,5 @@
 import React from 'react';
+import key from 'keymaster';
 
 import Player from './Player.jsx';
 import ClipForm from './ClipForm.jsx';
@@ -10,19 +11,24 @@ const App = React.createClass({
       return JSON.parse(window.localStorage.kvPlayer);
     }
     return ({
-      clips: [],
-      fullClip: { id: 0, name: 'Full Video', start: 0 },
+      clips: [{ id: 0, name: 'Full Video', start: 0 }],
       activeClipID: '',
+    });
+  },
+  componentDidMount() {
+    const app = this;
+    key(',', () => {
+      app.playPrevClip();
+    });
+    key('.', () => {
+      app.playNextClip();
     });
   },
   componentDidUpdate() {
     window.localStorage.kvPlayer = JSON.stringify(this.state);
   },
-  onKeyUp(e) {
-    console.log(e);
-  },
   getChildClips() {
-    return this.state.clips.map((clip) =>
+    return this.state.clips.slice(1).map((clip) =>
       <Clip
         key={clip.id}
         clip={clip}
@@ -33,13 +39,30 @@ const App = React.createClass({
     );
   },
   setVideoDuration(dur) {
-    if (!this.state.fullClip.end) {
-      const fullClip = Object.assign(this.state.fullClip, { end: dur });
-      this.setState({ fullClip });
+    if (!this.state.clips[0].end) {
+      const newClips = this.state.clips;
+      newClips[0].end = dur;
+      this.setState({ clips: newClips });
     }
   },
   getActiveClip() {
     return this.state.clips.find((clip) => clip.id === this.state.activeClipID);
+  },
+  playNextClip() {
+    const clipsIdx = this.state.clips.findIndex((clip) =>
+    clip.id === this.state.activeClipID
+    );
+    if (clipsIdx < this.state.clips.length - 1) {
+      this.setState({ activeClipID: this.state.clips[clipsIdx + 1].id });
+    }
+  },
+  playPrevClip() {
+    const clipsIdx = this.state.clips.findIndex((clip) =>
+      clip.id === this.state.activeClipID
+    );
+    if (clipsIdx > 0) {
+      this.setState({ activeClipID: this.state.clips[clipsIdx - 1].id });
+    }
   },
   deleteClip(id) {
     const { clips } = this.state;
@@ -83,10 +106,11 @@ const App = React.createClass({
           />
         </div>
         <h2>Add a clip:</h2>
+        <div>Navigate between clips with &lt; and &gt; keys</div>
         <ClipForm createClip={this.createClip} />
         <Clip
-          key={this.state.fullClip.id}
-          clip={this.state.fullClip}
+          key={this.state.clips[0].id}
+          clip={this.state.clips[0]}
           playClip={this.playClip}
         />
         {this.getChildClips()}
