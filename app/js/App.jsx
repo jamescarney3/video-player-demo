@@ -6,10 +6,20 @@ import Clip from './Clip.jsx';
 
 const App = React.createClass({
   getInitialState() {
+    if (window.localStorage.kvPlayer) {
+      return JSON.parse(window.localStorage.kvPlayer);
+    }
     return ({
       clips: [],
+      fullClip: { id: 0, name: 'Full Video', start: 0 },
       activeClipID: '',
     });
+  },
+  componentDidUpdate() {
+    window.localStorage.kvPlayer = JSON.stringify(this.state);
+  },
+  onKeyUp(e) {
+    console.log(e);
   },
   getChildClips() {
     return this.state.clips.map((clip) =>
@@ -22,13 +32,14 @@ const App = React.createClass({
       />
     );
   },
+  setVideoDuration(dur) {
+    if (!this.state.fullClip.end) {
+      const fullClip = Object.assign(this.state.fullClip, { end: dur });
+      this.setState({ fullClip });
+    }
+  },
   getActiveClip() {
     return this.state.clips.find((clip) => clip.id === this.state.activeClipID);
-  },
-  createClip(name, start, end) {
-    const id = this.nextClipID();
-    const newClips = this.state.clips.concat({ id, name, start, end });
-    this.setState({ clips: newClips });
   },
   deleteClip(id) {
     const { clips } = this.state;
@@ -43,6 +54,7 @@ const App = React.createClass({
   },
   playClip(id) {
     this.setState({ activeClipID: id });
+    this.player.video.load();
   },
   validateClipID(id) {
     return this.state.clips.every((clip) => clip.id !== id);
@@ -54,13 +66,29 @@ const App = React.createClass({
     }
     return newClipID;
   },
+  createClip(name, start, end) {
+    const id = this.nextClipID();
+    const newClips = this.state.clips.concat({ id, name, start, end });
+    this.setState({ clips: newClips });
+  },
   render() {
     return (
       <div>
         <h1>Video Player</h1>
-        <Player clip={this.getActiveClip()} />
+        <div style={{ backgroundColor: 'black', height: '480px' }}>
+          <Player
+            ref={(p) => { this.player = p; }}
+            clip={this.getActiveClip()}
+            onLoadedMetadata={this.setVideoDuration}
+          />
+        </div>
         <h2>Add a clip:</h2>
         <ClipForm createClip={this.createClip} />
+        <Clip
+          key={this.state.fullClip.id}
+          clip={this.state.fullClip}
+          playClip={this.playClip}
+        />
         {this.getChildClips()}
       </div>
     );
