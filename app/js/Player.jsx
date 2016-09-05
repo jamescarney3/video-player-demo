@@ -22,7 +22,7 @@ const Player = React.createClass({
     return (
       <video
         autoPlay
-        muted
+        className="player-video"
         onLoadedMetadata={() => { this.props.onLoadedMetadata(this.getDuration()); }}
         ref={(v) => { this.video = v; }}
         src={`sintel_trailer-480.mp4${this.getFragment()}`} type="video/mp4"
