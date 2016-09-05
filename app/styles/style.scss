@@ -1,4 +1,11 @@
 .player-video {
   display: block;
   margin: auto;
+  position: relative;
+  max-width: 100%;
+}
+
+.player-row {
+  background: #000000;
+  position: relative;
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import key from 'keymaster';
+import { Grid, Row } from 'react-bootstrap';
 
 import Player from './Player.jsx';
 import ClipForm from './ClipForm.jsx';
@@ -38,7 +39,7 @@ const App = React.createClass({
       />
     );
   },
-  setVideoDuration(dur) {
+  onVideoLoadedMetadata(dur) {
     if (!this.state.clips[0].end) {
       const newClips = this.state.clips;
       newClips[0].end = dur;
@@ -96,16 +97,14 @@ const App = React.createClass({
   },
   render() {
     return (
-      <div>
+      <Grid>
         <h1>Video Player</h1>
-        <div style={{ backgroundColor: 'black', height: '480px' }}>
-          <Player
-            ref={(p) => { this.player = p; }}
-            clip={this.getActiveClip()}
-            onLoadedMetadata={this.setVideoDuration}
-          />
-        </div>
-        <h2>Add a clip:</h2>
+        <Player
+          ref={(p) => { this.player = p; }}
+          clip={this.getActiveClip()}
+          onLoadedMetadata={this.onVideoLoadedMetadata}
+        />
+        <Row><h2>Add a clip:</h2></Row>
         <div>Navigate between clips with &lt; and &gt; keys</div>
         <ClipForm createClip={this.createClip} />
         <Clip
@@ -114,7 +113,7 @@ const App = React.createClass({
           playClip={this.playClip}
         />
         {this.getChildClips()}
-      </div>
+      </Grid>
     );
   },
 });
