@@ -12,6 +12,7 @@
   "rules": {
     "camelcase": 0,
     "no-shadow": 0,
-    "strict": 0
+    "strict": 0,
+    "prefer-es6-class": 0
   }
 }
