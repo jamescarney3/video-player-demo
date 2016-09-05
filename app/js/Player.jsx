@@ -26,9 +26,7 @@ const Player = React.createClass({
         onLoadedMetadata={() => { this.props.onLoadedMetadata(this.getDuration()); }}
         ref={(v) => { this.video = v; }}
         src={`sintel_trailer-480.mp4${this.getFragment()}`} type="video/mp4"
-      >
-        <track src="chapters.vtt" kind="chapters" default />
-      </video>
+      />
     );
   },
 });
