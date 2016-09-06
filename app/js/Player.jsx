@@ -9,6 +9,10 @@ const Player = React.createClass({
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
   },
+  onLoadedMetadata() {
+    this.props.onLoadedMetadata(this.getDuration());
+    this.handleResize();
+  },
   getFragment() {
     if (this.props.clip) {
       const { start, end } = this.props.clip;
@@ -33,7 +37,7 @@ const Player = React.createClass({
         <video
           autoPlay
           className="player-video"
-          onLoadedMetadata={() => { this.props.onLoadedMetadata(this.getDuration()); }}
+          onLoadedMetadata={this.onLoadedMetadata}
           ref={(v) => { this.video = v; }}
           src={`sintel_trailer-480.mp4${this.getFragment()}`} type="video/mp4"
         />

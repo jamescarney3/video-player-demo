@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 
 import ClipForm from './ClipForm.jsx';
 
@@ -9,6 +9,7 @@ const Clip = React.createClass({
     deleteClip: PropTypes.func,
     playClip: PropTypes.func.isRequired,
     updateClip: PropTypes.func,
+    validateClip: PropTypes.func,
   },
   getInitialState() {
     return { updating: false };
@@ -44,23 +45,34 @@ const Clip = React.createClass({
   },
   render() {
     if (this.state.updating) {
-      const { name, start, end } = this.props.clip;
+      const { name, start, end, id } = this.props.clip;
       return (
         <ClipForm
           createClip={this.onSubmitUpdate}
-          {...{ name, start, end }}
+          validateClip={this.props.validateClip}
+          {...{ name, start: parseInt(start, 10), end: parseInt(end, 10), id }}
         />
       );
     }
     return (
-      <Form inline>
-        <span>name: {this.props.clip.name},</span>
-        <span>start time: {this.props.clip.start},</span>
-        <span>end time: {this.props.clip.end}</span>
-        <Button onClick={this.onClickPlay}>Play</Button>
-        {this.getUpdateButton()}
-        {this.getDeleteButton()}
-      </Form>
+      <Row>
+        <Form>
+          <Col xs={3}>
+            Clip Name: {this.props.clip.name}
+          </Col>
+          <Col xs={3}>
+            Start: {this.props.clip.start}
+          </Col>
+          <Col xs={3}>
+            End: {this.props.clip.end}
+          </Col>
+          <Col xs={3}>
+            <Button onClick={this.onClickPlay}>Play</Button>
+            {this.getUpdateButton()}
+            {this.getDeleteButton()}
+          </Col>
+        </Form>
+      </Row>
     );
   },
 });

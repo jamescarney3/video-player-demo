@@ -28,6 +28,13 @@ const App = React.createClass({
   componentDidUpdate() {
     window.localStorage.kvPlayer = JSON.stringify(this.state);
   },
+  onVideoLoadedMetadata(dur) {
+    if (!this.state.clips[0].end) {
+      const newClips = this.state.clips;
+      newClips[0].end = dur;
+      this.setState({ clips: newClips });
+    }
+  },
   getChildClips() {
     return this.state.clips.slice(1).map((clip) =>
       <Clip
@@ -36,15 +43,9 @@ const App = React.createClass({
         deleteClip={this.deleteClip}
         playClip={this.playClip}
         updateClip={this.updateClip}
+        validateClip={this.validateNewClip}
       />
     );
-  },
-  onVideoLoadedMetadata(dur) {
-    if (!this.state.clips[0].end) {
-      const newClips = this.state.clips;
-      newClips[0].end = dur;
-      this.setState({ clips: newClips });
-    }
   },
   getActiveClip() {
     return this.state.clips.find((clip) => clip.id === this.state.activeClipID);
@@ -83,6 +84,21 @@ const App = React.createClass({
   validateClipID(id) {
     return this.state.clips.every((clip) => clip.id !== id);
   },
+  validateNewClip(name, startStr, endStr, id) {
+    const duration = this.state.clips[0].end;
+    const start = parseInt(startStr, 10);
+    const end = parseInt(endStr, 10);
+    if (!name || !start || !end || !duration) {
+      return false;
+    } else if (start < 0 || end < 0 || start > duration || end > duration) {
+      return false;
+    } else if (this.state.clips.find((c) => c.name === name && c.id !== id)) {
+      return false;
+    } else if (start > end) {
+      return false;
+    }
+    return true;
+  },
   nextClipID() {
     let newClipID = 1;
     while (!this.validateClipID(newClipID)) {
@@ -98,15 +114,18 @@ const App = React.createClass({
   render() {
     return (
       <Grid>
-        <h1>Video Player</h1>
+        <Row><h1>Video Player</h1></Row>
         <Player
           ref={(p) => { this.player = p; }}
           clip={this.getActiveClip()}
           onLoadedMetadata={this.onVideoLoadedMetadata}
         />
         <Row><h2>Add a clip:</h2></Row>
-        <div>Navigate between clips with &lt; and &gt; keys</div>
-        <ClipForm createClip={this.createClip} />
+        <ClipForm
+          createClip={this.createClip}
+          validateClip={this.validateNewClip}
+        />
+        <Row><h2>Navigate between clips with &lt; and &gt; keys</h2></Row>
         <Clip
           key={this.state.clips[0].id}
           clip={this.state.clips[0]}
