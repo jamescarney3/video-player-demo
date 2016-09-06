@@ -30,4 +30,5 @@ This demo app allows a user to slice up a video (included in the source) into cl
 - I've used the state of the outermost App React component as the source of truth for this demo (instead of wiring everything up to a redux store), for the sake of transparency and simplicity. Had I managed state via a redux store, it would have factored heavily into the implementation of the last bonus requirement.
 - I also use the browser's localStorage object in order to persist clips from session to session, instead of wiring it up to a server and dealing with user auth and recognition
 - As such, I didn't build a way for a user to clear their browser's persisted clip data, as it seemed to be of trivial importance for the main purpose of the demo
+- The app doesn't provide any error messages on validating new or updated clips - again, since this feature wasn't mentioned in the requirements I judged it to be of secondary importance
 - In the interest of time I skipped the first, third, fifth and sixth bonus requirements, but I have pretty solid ideas of how I would implement them; please feel free to get in touch with me for any explanations.
