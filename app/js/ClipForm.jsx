@@ -37,7 +37,7 @@ const ClipForm = React.createClass({
   },
   render() {
     return (
-      <Row>
+      <Row className="form-row">
         <Form>
           <Col xs={3}>
             <div>Clip name:</div>

@@ -55,7 +55,7 @@ const Clip = React.createClass({
       );
     }
     return (
-      <Row>
+      <Row className="clip-row">
         <Form>
           <Col xs={3}>
             Clip Name: {this.props.clip.name}
@@ -67,8 +67,8 @@ const Clip = React.createClass({
             End: {this.props.clip.end}
           </Col>
           <Col xs={3}>
-            <Button onClick={this.onClickPlay}>Play</Button>
-            {this.getUpdateButton()}
+            <Button onClick={this.onClickPlay}>Play</Button>{' '}
+            {this.getUpdateButton()}{' '}
             {this.getDeleteButton()}
           </Col>
         </Form>
