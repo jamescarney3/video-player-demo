@@ -9,7 +9,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.(html|mp4|vtt|jpg)$/,
+        test: /\.(html|vtt|jpg)$/,
         loader: 'file?name=[name].[ext]',
       },
       {

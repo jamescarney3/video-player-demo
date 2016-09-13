@@ -1,6 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Row } from 'react-bootstrap';
 
+const videoURL = 'http://grochtdreis.de/fuer-jsfiddle/video/sintel_trailer-480.mp4';
+
+
 const Player = React.createClass({
   propTypes: {
     clip: PropTypes.object,
@@ -39,7 +42,7 @@ const Player = React.createClass({
           className="player-video"
           onLoadedMetadata={this.onLoadedMetadata}
           ref={(v) => { this.video = v; }}
-          src={`sintel_trailer-480.mp4${this.getFragment()}`} type="video/mp4"
+          src={`${videoURL}${this.getFragment()}`} type="video/mp4"
         />
       </Row>
     );
